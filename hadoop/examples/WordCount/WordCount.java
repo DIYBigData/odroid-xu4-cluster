@@ -1,3 +1,13 @@
+/***
+ * WordCount for Hadoop
+ *
+ * This code was originally taken from Apache Hadoop MapReduce tutorial found here:
+ *
+ *    https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html
+ *
+ * This code corrects a bug that is found in the sample code in the tutorial.
+ */
+ 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
