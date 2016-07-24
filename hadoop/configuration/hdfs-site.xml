@@ -20,51 +20,71 @@
 	<property>
 		<name>dfs.replication</name>
 		<value>2</value>
+		<description>The default replication factor of files on HDFS</description>
 	</property>
 	<property> 
 		<name>dfs.block.size</name>
 		<value>16777216</value>
+		<description>The default block size in bytes of data saved to HDFS</description>
 	</property>
 	<property>
 		<name>dfs.namenode.rpc-bind-host</name>
 		<value>0.0.0.0</value>
+		<description>
+			controls what IP address the NameNode binds to. 
+			0.0.0.0 means all available.
+		</description>
 	</property>
 	<property>
 		<name>dfs.namenode.servicerpc-bind-host</name>
 		<value>0.0.0.0</value>
+		<description>
+			controls what IP address the NameNode binds to. 
+			0.0.0.0 means all available.
+		</description>
 	</property>
 	<property>
 		<name>dfs.namenode.http-bind-host</name>
 		<value>0.0.0.0</value>
+		<description>
+			controls what IP address the NameNode binds to. 
+			0.0.0.0 means all available.
+		</description>
 	</property>
 	<property>
 		<name>dfs.namenode.https-bind-host</name>
 		<value>0.0.0.0</value>
+		<description>
+			controls what IP address the NameNode binds to. 
+			0.0.0.0 means all available.
+		</description>
 	</property>
 	<property>
 		<name>nfs.dump.dir</name>
 		<value>/tmp/.hdfs-nfs</value>
+		<description>A temporary working directory for files coming into the HDFS proxy.</description>
 	</property>
 	<property>
 		<name>nfs.metrics.percentiles.intervals</name>
 		<value>100</value>
 		<description>
-			Enable the latency histograms for read, write and
-			commit requests. The time unit is 100 seconds in this example.
+			Enable the latency histograms for read, write and commit requests. 
+			The time unit is 100 seconds in this example.
 		</description>
 	</property>
 	<property>
 		<name>nfs.exports.allowed.hosts</name>
 		<value>* rw</value>
+		<description>Host permissions for connecting to the proxy.</description>
 	</property>
 	<property>
 		<name>dfs.permissions</name>
 		<value>true</value>
+		<description>Enforce permissions</description>
 	</property>
 	<property>
 		<name>dfs.permissions.supergroup</name>
 		<value>hadoop</value>
-		<description>The name of the group of super-users.</description>
+		<description>The name of the group of Hadoop super-users.</description>
 	</property>
-
 </configuration>
