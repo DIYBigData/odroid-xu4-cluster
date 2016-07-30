@@ -1,0 +1,10 @@
+chunkServer.metaServer.hostname = 10.10.10.1
+chunkServer.metaServer.port     = 30000
+chunkServer.clientPort = 20000
+chunkServer.chunkDir = /data/qfs/chunk
+chunkServer.clusterKey = qfs-odroid-xu4
+chunkServer.stdout = /dev/null
+chunkServer.stderr = /dev/null
+chunkServer.ioBufferPool.partitionBufferCount = 65536
+chunkServer.msgLogWriter.logLevel = INFO
+chunkServer.diskQueue.threadCount = 1
