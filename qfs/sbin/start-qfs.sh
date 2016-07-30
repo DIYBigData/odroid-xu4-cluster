@@ -175,6 +175,8 @@ if [[ -f "${QFS_CHUNK_SERVERS_FILE}" ]]; then
     done
     
     echo "Done launching Chunk Servers"
+else
+	echo "Could not find chunk_servers file. No Chunk Servers launched."
 fi
 
 #
