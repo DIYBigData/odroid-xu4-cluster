@@ -200,6 +200,11 @@ if [[ -f "${QFS_CHUNK_SERVERS_FILE}" ]]; then
         echo "${chunk_server} - Starting ChunkServer"
         if [[ $chunk_server = *[!\ ]* ]]; then
         	remote_command_eval $chunk_server $QFS_USER "${NOHUP_CMD} ${QFS_CHUNKSERVER_START_CMD} &>${CHUNKSERVER_LOG_FILEPATH} &"
+			if [ $? -eq 0 ]; then
+				echo "${chunk_server} - ChunkServer started."
+			else
+				echo "${chunk_server} - Failed to start ChunkServer."
+			fi
 		fi
     done
     
