@@ -47,11 +47,25 @@
 #			The file name for the log of stdout from the Chunk Server
 #			Defaults to "chunkserver.log"
 #
+#		WEBUI_LOG_FILENAME
+#			The file name for the log of stdout from the Mea Server Web UI
+#			Defaults to "qfsWebUI.log"
+#
 #		NOHUP_CMD
 #			Complete filepath to the nohup command
 #			Defaults to "/usr/bin/nohup"
 #
+#		QFS_USER
+#			The user that the QFS processes will be launched under.
+#			Defaults to the user that launched this script.
+#
+#		METASERVER_HOST_IP
+#			The address of the server that will run the Meta Server process
+#			Defaults to "localhost"
 # 
+#		START_QFS_SH_DEBUG
+#			A boolean value indicating whether debug logging should be emitted from this script.
+#
 
 function qfs_usage
 {
@@ -66,9 +80,11 @@ function qfs_usage
 #		$2 - The user to execute the command as
 #		$3 - the command to execute
 #
-function remote_chunkserver_start () 
+function remote_command_eval () 
 {
-	echo "Running: ssh -l ${2} ${1} \"${3}\""
+	if [ "$START_QFS_SH_DEBUG" = true ]; then
+		echo "Running: ssh -l ${2} ${1} \"${3}\""
+	fi
 	local RESULTS
     RESULTS=$(ssh -l ${2} ${1} "${3}")
 }
@@ -90,13 +106,23 @@ fi
 
 
 if [[ -f "${QFS_CONF_DIR}/qfs-env.sh" ]]; then
-	echo "Sourcing environment variables from ${QFS_CONF_DIR}/qfs-env.sh"
+	if [ "$START_QFS_SH_DEBUG" = true ]; then
+		echo "Sourcing environment variables from ${QFS_CONF_DIR}/qfs-env.sh"
+    fi
     . "${QFS_CONF_DIR}/qfs-env.sh"
 fi
 
 #
 # set needed environment variables if not set already
 #
+
+if ! [[ -n "${QFS_USER}" ]]; then
+	QFS_USER=$USER
+fi
+
+if ! [[ -n "${METASERVER_HOST_IP}" ]]; then
+	METASERVER_HOST_IP="localhost"
+fi
 
 if ! [[ -n "${QFS_BIN_DIR}" ]]; then
 	QFS_BIN_DIR="${QFS_HOME}/bin"
@@ -116,7 +142,7 @@ if ! [[ -n "${CHUNKSERVER_CONF_FILENAME}" ]]; then
 fi
 
 if ! [[ -n "${METASERVER_WEBUI_CONF_FILENAME}" ]]; then
-	METASERVER_CONF_FILENAME="webUI.cfg"
+	METASERVER_WEBUI_CONF_FILENAME="webUI.cfg"
 fi
 
 if ! [[ -n "${METASERVER_LOG_FILENAME}" ]]; then
@@ -127,6 +153,9 @@ if ! [[ -n "${CHUNKSERVER_LOG_FILENAME}" ]]; then
 	CHUNKSERVER_LOG_FILENAME="chunkserver.log"
 fi
 
+if ! [[ -n "${WEBUI_LOG_FILENAME}" ]]; then
+	WEBUI_LOG_FILENAME="qfsWebUI.log"
+fi
 
 if ! [[ -n "${METASERVER_LOG_FILEPATH}" ]]; then
 	METASERVER_LOG_FILEPATH="${QFS_LOGS_DIR}/${METASERVER_LOG_FILENAME}"
@@ -151,7 +180,7 @@ fi
 
 echo "Starting Meta Server with logging to ${METASERVER_LOG_FILEPATH}"
 EVAL_METASERVER_CMD="${NOHUP_CMD} ${QFS_METASERVER_START_CMD} &>${METASERVER_LOG_FILEPATH} &"
-eval $EVAL_METASERVER_CMD
+remote_command_eval $METASERVER_HOST_IP $QFS_USER "${EVAL_METASERVER_CMD}"
 if [ $? -eq 0 ]; then
 	echo "Meta Server started."
 else
@@ -170,7 +199,7 @@ if [[ -f "${QFS_CHUNK_SERVERS_FILE}" ]]; then
     for chunk_server in $CHUNK_SERVER_LIST; do
         echo "${chunk_server} - Starting ChunkServer"
         if [[ $chunk_server = *[!\ ]* ]]; then
-        	remote_chunkserver_start $chunk_server $USER "${NOHUP_CMD} ${QFS_CHUNKSERVER_START_CMD} &>${CHUNKSERVER_LOG_FILEPATH} &"
+        	remote_command_eval $chunk_server $QFS_USER "${NOHUP_CMD} ${QFS_CHUNKSERVER_START_CMD} &>${CHUNKSERVER_LOG_FILEPATH} &"
 		fi
     done
     
@@ -183,9 +212,9 @@ fi
 # Start Meta Server Web UI
 #
 
-EVAL_WEBUI_CMD="${NOHUP_CMD} ${QFS_HOME}/webui/qfsstatus.py ${QFS_CONF_DIR}/${METASERVER_WEBUI_CONF_FILENAME}"
+EVAL_WEBUI_CMD="${NOHUP_CMD} ${QFS_HOME}/webui/qfsstatus.py ${QFS_CONF_DIR}/${METASERVER_WEBUI_CONF_FILENAME} &>${QFS_LOGS_DIR}/${WEBUI_LOG_FILENAME} &"
 echo "Starting Meta Server Web UI"
-eval $EVAL_WEBUI_CMD
+remote_command_eval $METASERVER_HOST_IP $QFS_USER "${EVAL_WEBUI_CMD}"
 if [ $? -eq 0 ]; then
 	echo "Meta Server Web UI started."
 else
