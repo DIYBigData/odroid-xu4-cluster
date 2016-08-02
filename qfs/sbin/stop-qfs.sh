@@ -17,40 +17,26 @@ function remote_command_eval ()
     RESULTS=$(ssh -l ${2} ${1} "${3}")
 }
 
-this="${BASH_SOURCE-$0}"
+this="${BASH_SOURCE:-$0}"
 bin=$(cd -P -- "$(dirname -- "${this}")" >/dev/null && pwd -P)
 
-if ! [[ -n "${PKILL_CMD}" ]]; then
-	PKILL_CMD="/usr/bin/pkill"
-fi
-
-if ! [[ -n "${QFS_HOME}" ]]; then
-        QFS_HOME="/usr/local/qfs"
-fi
-
-if ! [[ -n "${QFS_CONF_DIR}" ]]; then
-	QFS_CONF_DIR="${QFS_HOME}/conf"
-fi
+PKILL_CMD=${PKILL_CMD:-"/usr/bin/pkill"}
+QFS_HOME=${QFS_HOME:-"/usr/local/qfs"}
+QFS_CONF_DIR=${QFS_CONF_DIR:-"${QFS_HOME}/conf"}
 
 
 if [[ -f "${QFS_CONF_DIR}/qfs-env.sh" ]]; then
 	if [ "$START_QFS_SH_DEBUG" = true ]; then
 		echo "Sourcing environment variables from ${QFS_CONF_DIR}/qfs-env.sh"
     fi
-    . "${QFS_CONF_DIR}/qfs-env.sh"
+    source "${QFS_CONF_DIR}/qfs-env.sh"
 fi
 
 #
 # set needed environment variables if not set already
 #
-
-if ! [[ -n "${QFS_USER}" ]]; then
-	QFS_USER=$USER
-fi
-
-if ! [[ -n "${METASERVER_HOST_IP}" ]]; then
-	METASERVER_HOST_IP="localhost"
-fi
+QFS_USER=${QFS_USER:-$USER}
+METASERVER_HOST_IP=${METASERVER_HOST_IP:-"localhost"}
 
 #
 # Stop the Web UI
