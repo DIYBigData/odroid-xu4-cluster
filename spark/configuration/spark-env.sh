@@ -23,11 +23,9 @@ SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath)
 HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
 SPARK_LOCAL_DIRS=/data/spark
 
-SPARK_WORKER_MEMORY=1300M
-SPARK_WORKER_CORES=3
+SPARK_WORKER_MEMORY=1100M
+SPARK_WORKER_CORES=2
 
-SPARK_DAEMON_JAVA_OPTS="-Dspark.worker.timeout=600 -Dspark.akka.timeout=200 -Dspark.shuffle.consolidateFiles=true"
-SPARK_JAVA_OPTS="-Dspark.worker.timeout=600 -Dspark.akka.timeout=200 -Dspark.shuffle.consolidateFiles=true"
 
 # This file is sourced when running various Spark programs.
 # Copy it as spark-env.sh and edit that to configure Spark for your site.
