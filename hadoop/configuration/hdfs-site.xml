@@ -24,7 +24,7 @@
 	</property>
 	<property> 
 		<name>dfs.block.size</name>
-		<value>16777216</value>
+		<value>64m</value>
 		<description>The default block size in bytes of data saved to HDFS</description>
 	</property>
 	<property>
