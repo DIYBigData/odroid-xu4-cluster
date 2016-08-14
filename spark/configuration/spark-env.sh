@@ -23,7 +23,7 @@ SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath)
 HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop
 SPARK_LOCAL_DIRS=/data/spark
 
-SPARK_WORKER_MEMORY=1100M
+SPARK_WORKER_MEMORY=1200M
 SPARK_WORKER_CORES=2
 
 
