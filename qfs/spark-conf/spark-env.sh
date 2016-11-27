@@ -17,8 +17,8 @@
 # limitations under the License.
 #
 
-LD_LIBRARY_PATH=/usr/local/qfs/lib
-SPARK_DIST_CLASSPATH=/usr/local/qfs/lib/hadoop-2.5.1-qfs-c01bcf9.jar:/usr/local/qfs/lib/qfs-access-c01bcf9.jar
+LD_LIBRARY_PATH=/usr/local/qfs/lib:/usr/local/hadoop/lib/native/
+SPARK_DIST_CLASSPATH=/usr/local/qfs/lib/hadoop-2.7.2-qfs-1.2.0.jar:/usr/local/qfs/lib/qfs-access-1.2.0
 SPARK_HOME=/usr/local/spark-qfs/
 
 PYSPARK_PYTHON=python3
